@@ -1,46 +1,45 @@
 import request from '@/utils/request'
 
 // 查询SysApi列表
-export function listSysApi(query) {
+export function listSysApiApi(data) {
   return request({
-    url: '/api/v1/sys-api',
+    url: '/sys/api/list',
     method: 'get',
-    params: query
+    params: data
   })
 }
 
-// 查询SysApi详细
-export function getSysApi(id) {
+// 接口分类
+export function getTagApiApi(data) {
   return request({
-    url: '/api/v1/sys-api/' + id,
-    method: 'get'
+    url: '/sys/api/get_tag',
+    method: 'get',
+    params: data
   })
 }
 
-// 新增SysApi
-export function addSysApi(data) {
+// 修改SysApi
+export function editSysApiApi(data) {
   return request({
-    url: '/api/v1/sys-api',
+    url: '/sys/api/edit',
     method: 'post',
     data: data
   })
 }
 
-// 修改SysApi
-export function updateSysApi(data) {
+// 批量删除
+export function deleteMultiApi(data) {
   return request({
-    url: '/api/v1/sys-api/' + data.id,
-    method: 'put',
+    url: '/sys/api/delete_multi',
+    method: 'post',
     data: data
   })
 }
 
-// 删除SysApi
-export function delSysApi(data) {
+// 刷新接口
+export function refreshApi() {
   return request({
-    url: '/api/v1/sys-api',
-    method: 'delete',
-    data: data
+    url: '/sys/api/refresh',
+    method: 'post'
   })
 }
-

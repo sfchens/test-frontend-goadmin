@@ -1,68 +1,46 @@
 import request from '@/utils/request'
 
-// 查询参数列表
-export function listConfig(query) {
-  return request({
-    url: '/api/v1/config',
-    method: 'get',
-    params: query
-  })
-}
-
-// 查询参数详细
-export function getConfig(configId) {
-  return request({
-    url: '/api/v1/config/' + configId,
-    method: 'get'
-  })
-}
-
-// 根据参数键名查询参数值
-export function getConfigKey(configKey) {
-  return request({
-    url: '/api/v1/configKey/' + configKey,
-    method: 'get'
-  })
-}
-
 // 新增参数配置
-export function addConfig(data) {
+export function addConfigApi(data) {
   return request({
-    url: '/api/v1/config',
+    url: '/sys/config/add',
     method: 'post',
     data: data
   })
 }
 
 // 修改参数配置
-export function updateConfig(data) {
+export function editConfigApi(data) {
   return request({
-    url: '/api/v1/config/' + data.id,
-    method: 'put',
+    url: '/sys/config/edit',
+    method: 'post',
     data: data
+  })
+}
+
+// 查询参数列表
+export function listConfigApi(query) {
+  return request({
+    url: '/sys/config/list',
+    method: 'get',
+    params: query
   })
 }
 
 // 删除参数配置
-export function delConfig(data) {
+export function delConfigApi(data) {
   return request({
-    url: '/api/v1/config',
-    method: 'delete',
+    url: '/sys/config/delete',
+    method: 'post',
     data: data
   })
 }
 
-export function getSetConfig(query) {
+// 设置状态
+export function SetStatusConfigApi(data) {
   return request({
-    url: '/api/v1/set-config',
-    method: 'get'
-  })
-}
-
-export function updateSetConfig(data) {
-  return request({
-    url: '/api/v1/set-config',
-    method: 'put',
+    url: '/sys/config/set_status',
+    method: 'post',
     data: data
   })
 }

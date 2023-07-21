@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询用户列表
 export function listUser(query) {
   return request({
-    url: '/api/v1/sys-user',
+    url: '/sys-user',
     method: 'get',
     params: query
   })
@@ -12,14 +12,14 @@ export function listUser(query) {
 // 查询用户详细
 export function getUser(userId) {
   return request({
-    url: '/api/v1/sys-user/' + userId,
+    url: '/sys-user/' + userId,
     method: 'get'
   })
 }
 
 export function getUserInit() {
   return request({
-    url: '/api/v1/sys-user/',
+    url: '/sys-user/',
     method: 'get'
   })
 }
@@ -27,7 +27,7 @@ export function getUserInit() {
 // 新增用户
 export function addUser(data) {
   return request({
-    url: '/api/v1/sys-user',
+    url: '/sys-user',
     method: 'post',
     data: data
   })

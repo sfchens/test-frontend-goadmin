@@ -5,7 +5,7 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: process.env.VUE_APP_BASE_API + '/api/v1', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 10000 // request timeout
 })
@@ -22,7 +22,6 @@ service.interceptors.request.use(
       config.headers['Authorization'] = 'Bearer ' + getToken()
       config.headers['Content-Type'] = 'application/json'
     }
-    console.log('request~~~~~~~~~~')
     return config
   },
   error => {
@@ -45,7 +44,6 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    console.log('response~~~~~~~~~~', response)
     const code = response.data.code
     if (code === 401) {
       store.dispatch('user/resetToken')

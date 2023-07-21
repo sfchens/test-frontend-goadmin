@@ -5,7 +5,6 @@ export default {
     const { value } = binding
     const all_permission = '*:*:*'
     const permissions = store.getters && store.getters.permisaction
-
     if (value && value instanceof Array && value.length > 0) {
       const permissionFlag = value
 

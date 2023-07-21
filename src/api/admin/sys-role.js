@@ -8,7 +8,12 @@ export function listRole(query) {
     params: query
   })
 }
-
+export function getRoutes() {
+  return request({
+    url: '/sys/menu/tree_role_list',
+    method: 'get'
+  })
+}
 // 查询角色详细
 export function getRole(roleId) {
   return request({
@@ -69,13 +74,6 @@ export function delRole(roleId) {
 export function getListrole(id) {
   return request({
     url: '/api/v1/menu/role/' + id,
-    method: 'get'
-  })
-}
-
-export function getRoutes() {
-  return request({
-    url: '/api/v1/sys/menu/tree_role_list',
     method: 'get'
   })
 }
