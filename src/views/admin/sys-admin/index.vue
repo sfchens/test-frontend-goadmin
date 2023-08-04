@@ -2,10 +2,8 @@
   <BasicLayout>
     <template #wrapper>
       <el-card class="box-card">
-
         <table-item ref="tableItem" @handleAdd="handleAdd" @handleEdit="handleEdit" />
-        <form-modal ref="formModal" :modal-ref="formalModalRef" />
-
+        <form-modal v-if="formModalRef.visible" ref="formModal" :modal-ref="formModalRef" @handleSearch="handleSearch" />
       </el-card>
     </template>
   </BasicLayout>
@@ -13,40 +11,38 @@
 
 <script>
 
-import { createRef } from '@/utils/tool'
 import tableItem from './components/table-item.vue'
 import formModal from './components/form-modal.vue'
+import { createRef } from '@/utils/tool'
 
 export default {
-  name: 'SysMenuManage',
+  name: 'SysAdminManage',
   components: { tableItem, formModal },
   data() {
     return {
-      formalModalRef: createRef()
+      formModalRef: createRef()
     }
   },
+  watch: {
+  },
   created() {
+
   },
   methods: {
     handleAdd(ref) {
-      this.formalModalRef = {
-        ...this.formalModalRef,
+      this.formModalRef = {
+        ...this.formModalRef,
         ...ref
-      }
-
-      if (ref.data !== undefined) {
-        this.$refs.formModal.formData.parent_id = ref.data.id
       }
     },
     handleEdit(ref) {
-      this.formalModalRef = {
-        ...this.formalModalRef,
+      this.formModalRef = {
         ...ref
       }
-      this.$refs.formModal.formData = ref.data
-      console.log(999, ref, this.$refs.formModal.formData)
+    },
+    handleSearch() {
+      this.$refs.tableItem.handleSearch()
     }
   }
 }
 </script>
-

@@ -1,9 +1,36 @@
 import request from '@/utils/request'
 
 // 查询菜单列表
-export function listMenu(query) {
+export function treeListMenuApi(query) {
   return request({
     url: '/sys/menu/tree_list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 新增菜单
+export function addMenuApi(data) {
+  return request({
+    url: '/sys/menu/add',
+    method: 'post',
+    data: data
+  })
+}
+
+// 编辑菜单
+export function editMenuApi(data) {
+  return request({
+    url: '/sys/menu/edit',
+    method: 'post',
+    data: data
+  })
+}
+
+// 查询菜单列表
+export function treeListAllMenuApi(query) {
+  return request({
+    url: '/sys/menu/tree_list_all',
     method: 'get',
     params: query
   })

@@ -64,7 +64,7 @@
 import userAvatar from './userAvatar'
 import userInfo from './userInfo'
 import resetPwd from './resetPwd'
-import { getUserProfile } from '@/api/admin/sys-user'
+import { getUserProfile } from '@/api/admin/sys-admin'
 
 export default {
   name: 'Profile',

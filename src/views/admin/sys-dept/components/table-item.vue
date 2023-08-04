@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
-    <el-form :inline="true">
-      <el-form-item ref="searchRef" label="部门名称">
+    <el-form ref="searchRef" :inline="true">
+      <el-form-item label="部门名称">
         <el-input
           v-model="searchData.name"
           placeholder="请输入部门名称"

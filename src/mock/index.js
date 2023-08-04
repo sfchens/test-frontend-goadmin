@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 // import { ajcaptcha } from './data/common'
 // import { systemLogin } from './data/login'
-import { systemMenuTreeList } from './data/menu'
+// import { systemMenuTreeList } from './data/menu'
 // import { getUserInfo } from './data/user'
 
 // 配置Ajax请求延时，可用来测试网络延迟大时项目中一些效果
@@ -19,7 +19,7 @@ Mock.setup({
 // Mock.mock(/\/api\/v1\/captcha\/get_one/, ajcaptcha)
 
 // 菜单管理
-Mock.mock(/\/api\/v1\/sys\/menu\/tree_list/, systemMenuTreeList)
+// Mock.mock(/\/api\/v1\/sys\/menu\/tree_list/, systemMenuTreeList)
 // Mock.mock(/\/api\/v1\/sys\/menu\/role/, systemMenuTreeList)
 // Mock.mock(/\/backend\/system\/auths_menu\/tree_list/, systemMenuTreeList)
 // Mock.mock(/\/backend\/system\/auths_route\/router_list/, systemRoute)

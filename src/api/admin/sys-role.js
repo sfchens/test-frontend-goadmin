@@ -1,9 +1,18 @@
 import request from '@/utils/request'
 
-// 查询角色列表
-export function listRole(query) {
+// 新增角色
+export function addRoleApi(data) {
   return request({
-    url: '/api/v1/role',
+    url: '/sys/role/add',
+    method: 'post',
+    data: data
+  })
+}
+
+// 查询角色列表
+export function listRoleApi(query) {
+  return request({
+    url: '/sys/role/list',
     method: 'get',
     params: query
   })
@@ -15,10 +24,11 @@ export function getRoutes() {
   })
 }
 // 查询角色详细
-export function getRole(roleId) {
+export function delBatchRoleApi(data) {
   return request({
-    url: '/api/v1/role/' + roleId,
-    method: 'get'
+    url: '/sys/role/delete_batch',
+    method: 'post',
+    data: data
   })
 }
 
