@@ -26,7 +26,7 @@
         </div>
       </el-col> -->
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
+      <el-col>
         <el-form ref="searchRef" :model="searchData" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="realname">
             <el-input
@@ -58,10 +58,20 @@
               @keyup.enter.native="handleSearch"
             />
           </el-form-item>
+          <el-form-item label="邮箱" prop="phone">
+            <el-input
+              v-model="searchData.email"
+              placeholder="请输入邮箱"
+              clearable
+              size="small"
+              style="width: 160px"
+              @keyup.enter.native="handleSearch"
+            />
+          </el-form-item>
           <el-form-item label="状态" prop="status">
-            <!-- <el-select
+            <el-select
               v-model="searchData.status"
-              placeholder="用户状态"
+              placeholder="状态"
               clearable
               size="small"
               style="width: 160px"
@@ -72,7 +82,7 @@
                 :label="dict.label"
                 :value="dict.value"
               />
-            </el-select> -->
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSearch">搜索</el-button>
@@ -92,11 +102,11 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysAdmin:delete']"
+              v-permisaction="['admin:sysAdmin:deleteBatch']"
               type="danger"
               icon="el-icon-delete"
               size="mini"
-              @click="handleDelete"
+              @click="handleDeleteBatch"
             >删除</el-button>
           </el-col>
         </el-row>
@@ -108,14 +118,15 @@
           @selection-change="handleSelectChange"
           @sort-change="handleSortChang"
         >
-          <el-table-column type="selection" width="45" align="center" />
-          <el-table-column label="序号" width="75" prop="id" sortable="custom" />
-          <el-table-column label="账号" width="105" prop="username" sortable="custom" :show-overflow-tooltip="true" />
-          <el-table-column label="姓名" prop="realname" :show-overflow-tooltip="true" />
-          <el-table-column label="部门" prop="dept_info.name" :show-overflow-tooltip="true" />
-          <el-table-column label="邮箱" prop="email" width="108" />
-          <el-table-column label="手机号" prop="phone" width="108" />
-          <el-table-column label="状态" width="80" sortable="custom">
+          <el-table-column type="selection" align="center" />
+          <el-table-column label="序号" align="center" prop="id" sortable="custom" />
+          <el-table-column label="账号" align="center" prop="username" sortable="custom" :show-overflow-tooltip="true" />
+          <el-table-column label="姓名" align="center" prop="realname" :show-overflow-tooltip="true" />
+          <el-table-column label="部门" align="center" prop="dept_info.name" :show-overflow-tooltip="true" />
+          <el-table-column label="邮箱" align="center" prop="email" />
+          <el-table-column label="手机号" align="center" prop="phone" />
+          <el-table-column label="权限" align="center" prop="role_ids_text" />
+          <el-table-column label="状态">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -129,27 +140,25 @@
             label="更新时间"
             prop="updated_at"
             sortable="custom"
-            width="155"
+            align="center"
           >
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.updated_at) }}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column
+          <el-table-column
             label="创建时间"
             prop="created_at"
             sortable="custom"
-            width="155"
+            align="center"
           >
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.created_at) }}</span>
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column
             label="操作"
-            width="160"
-
-            fix="right"
+            align="center"
             class-name="small-padding fixed-width"
           >
             <template slot-scope="scope">
@@ -174,7 +183,22 @@
                 type="text"
                 icon="el-icon-key"
                 @click="handleResetPwd(scope.row)"
-              >重置</el-button>
+              >重置密码</el-button>
+              <el-button
+                v-permisaction="['admin:sysAdmin:editRole']"
+                size="mini"
+                type="text"
+                icon="el-icon-key"
+                @click="handleEditRole(scope.row)"
+              >编辑权限</el-button>
+              <el-button
+                v-permisaction="['admin:sysAdmin:setStatus']"
+                size="mini"
+                type="text"
+                style="color: red"
+                icon="el-icon-delete"
+                @click="handleSetStatus(scope.row)"
+              >{{ scope.row.status === 1 ? "冻结" : "解冻" }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -192,12 +216,17 @@
 </template>
 
 <script>
-import { listAdminApi } from '@/api/admin/sys-admin'
+import { listAdminApi, resetPwdAdminApi, setStatusAdminApi, deleteBatchAdminApi } from '@/api/admin/sys-admin'
 
 const createSearchData = () => {
   return {
     page: 1,
-    page_size: 10
+    page_size: 10,
+    realname: '',
+    username: '',
+    phone: '',
+    email: '',
+    status: ''
   }
 }
 export default {
@@ -207,7 +236,18 @@ export default {
       loading: true,
       searchData: createSearchData(),
       tableList: [],
-      total: 0
+      total: 0,
+      ids: [],
+      statusOptions: [
+        {
+          label: '正常',
+          value: 1
+        },
+        {
+          label: '冻结',
+          value: 2
+        }
+      ]
     }
   },
   created() {
@@ -229,11 +269,65 @@ export default {
       row.password = ''
       this.$emit('handleEdit', { title: '编辑', visible: true, data: row })
     },
-    handleResetPwd() {},
-    handleDelete() {},
-    handleSelectChange() {},
+    handleResetPwd(row) {
+      resetPwdAdminApi({ id: row.id }).then(res => {
+        if (res.code !== 200) {
+          this.msgError(res.msg)
+          return
+        }
+        this.msgSuccess(res.msg)
+      })
+    },
+    handleStatusChange(row) {
+      var status = row.status === 1 ? 2 : 1
+      row.status = status
+      this.handleSetStatus(row)
+    },
+    handleSetStatus(row) {
+      var status = row.status === 1 ? 2 : 1
+      setStatusAdminApi({ id: row.id, status: status }).then(res => {
+        if (res.code !== 200) {
+          this.msgError(res.msg)
+          return
+        }
+        this.msgSuccess(res.msg)
+        this.handleSearch()
+      })
+    },
+    handleDelete(row) {
+      this.handleDelBatch([row.id])
+    },
+    handleSelectChange(selection) {
+      this.ids = selection.map(item => item.id)
+    },
+    handleDeleteBatch(setion) {
+      this.handleDelBatch(this.ids)
+    },
+    handleEditRole(row) {
+      this.$emit('handleEditRole', { title: '编辑权限', visible: true, data: row })
+    },
+    handleDelBatch(ids) {
+      if (ids.length <= 0) {
+        this.msgError('请选择需要删除数据')
+        return
+      }
+      this.$confirm('是否确认删除序号 ID 为"' + ids + '"的数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return deleteBatchAdminApi({ 'ids': ids })
+      }).then((res) => {
+        if (res.code === 200) {
+          this.msgSuccess(res.msg)
+          this.handleSearch()
+        } else {
+          this.msgError(res.msg)
+        }
+        this.ids = []
+      }).catch(function() {})
+    },
     handleSortChang() {},
-    handleStatusChange() {},
     getList(searchData) {
       listAdminApi(searchData).then(res => {
         if (res.code !== 200) {

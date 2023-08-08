@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-    <el-form ref="searchRef" :model="searchData" :inline="true" label-width="48px">
+    <el-form ref="searchRef" :model="searchData" :inline="true" label-width="70px">
       <el-form-item label="名称" prop="name">
         <el-input
           v-model="searchData.name"
@@ -15,6 +15,16 @@
         <el-input
           v-model="searchData.key"
           placeholder="请输入参数键名"
+          clearable
+          size="small"
+          style="width: 160px"
+          @keyup.enter.native="handleSearch"
+        />
+      </el-form-item>
+      <el-form-item label="键值" prop="key_name">
+        <el-input
+          v-model="searchData.key_name"
+          placeholder="请输入键值"
           clearable
           size="small"
           style="width: 160px"
@@ -83,11 +93,6 @@
         label="键名"
         prop="key"
         :show-overflow-tooltip="true"
-        align="center"
-      />
-      <el-table-column
-        label="键值"
-        prop="config"
         align="center"
       />
       <el-table-column
@@ -178,13 +183,15 @@
 
 <script>
 import { listConfigApi, delConfigApi, SetStatusConfigApi } from '@/api/admin/sys-config'
+import _ from 'lodash'
+
 const createSearchData = () => {
   return {
     page: 1,
-    pageSize: 10,
+    page_size: 10,
     name: '',
     key: '',
-    type: 1,
+    key_name: '',
     order: ''
   }
 }
@@ -216,7 +223,7 @@ export default {
       this.$emit('handleAdd', { visible: true, title: '新增' })
     },
     handleEdit(row) {
-      this.$emit('handleEdit', { visible: true, title: '新增', data: row })
+      this.$emit('handleEdit', { visible: true, title: '新增', data: _.cloneDeep(row) })
     },
     handleSort(column, prop, order) {
       prop = column.prop

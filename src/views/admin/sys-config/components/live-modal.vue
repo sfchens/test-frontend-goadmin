@@ -2,7 +2,8 @@
   <div>
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="modalRef.title" :visible.sync="modalRef.visible" width="500px" :close-on-click-modal="false">
-      <el-form ref="formRef" :model="formData" :rules="formRules" label-width="80px">
+      这是user-modal
+      <!-- <el-form ref="formRef" :model="formData" :rules="formRules" label-width="80px">
         <el-form-item v-if="formData.id" label="ID" prop="id">
           <el-input v-model="formData.id" :disabled="true" />
         </el-form-item>
@@ -27,14 +28,14 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="handleClose">取 消</el-button>
-      </div>
+        <el-button @click="handleCancel">取 消</el-button>
+      </div> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { addConfigApi } from '@/api/admin/sys-config'
+import { addConfigApi, editConfigApi } from '@/api/admin/sys-config'
 import { createRef } from '@/utils/tool'
 
 const createFormData = () => {
@@ -43,6 +44,7 @@ const createFormData = () => {
     name: '',
     key: '',
     config: '',
+    type: 1,
     is_open: '',
     remark: ''
   }
@@ -65,7 +67,7 @@ const createFormRule = () => {
   }
 }
 export default {
-  name: 'FormModal',
+  name: 'LiveModal',
   props: {
     modalRef: {
       type: Object,
@@ -97,13 +99,25 @@ export default {
 
             this.formData = createFormData()
             this.msgSuccess(res.msg)
-            this.handleClose()
+          })
+        } else {
+          editConfigApi(formData).then((res) => {
+            if (res.code !== 200) {
+              this.msgError(res.msg)
+              return
+            }
+
+            this.formData = createFormData()
+            this.msgSuccess(res.msg)
           })
         }
+
+        this.modalRef = createRef()
+        this.$emit('handleSearch')
       })
     },
-    handleClose() {
-      this.$emit('handleClose')
+    handleCancel() {
+      this.modalRef = createRef()
     }
   }
 }

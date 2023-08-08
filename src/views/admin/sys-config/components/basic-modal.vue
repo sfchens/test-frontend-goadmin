@@ -12,8 +12,11 @@
         <el-form-item label="参数键名" prop="key">
           <el-input v-model="formData.key" :disabled="formData.id>0" placeholder="请输入参数键名" />
         </el-form-item>
-        <el-form-item label="参数键值" prop="config">
-          <el-input v-model="formData.config" placeholder="请输入参数键值" />
+        <el-form-item label="APP logo" prop="config['sys_app_logo']">
+          <el-input v-model="formData.config['sys_app_logo']" placeholder="请输入app logo" />
+        </el-form-item>
+        <el-form-item label="APP 名称" prop="config['sys_app_name']">
+          <el-input v-model="formData.config['sys_app_name']" placeholder="请输入app 名称" />
         </el-form-item>
         <el-form-item label="前台显示" prop="is_open">
           <el-select v-model="formData.is_open" placeholder="是否前台显示" clearable size="small">
@@ -34,7 +37,6 @@
 </template>
 
 <script>
-import { addConfigApi } from '@/api/admin/sys-config'
 import { createRef } from '@/utils/tool'
 
 const createFormData = () => {
@@ -42,7 +44,11 @@ const createFormData = () => {
     id: '',
     name: '',
     key: '',
-    config: '',
+    config: {
+      sys_app_logo: '',
+      sys_app_name: ''
+    },
+    type: 1,
     is_open: '',
     remark: ''
   }
@@ -56,8 +62,11 @@ const createFormRule = () => {
     key: [
       { required: true, message: '请输入键名', trigger: 'blur' }
     ],
-    value: [
-      { required: true, message: '请输入键值', trigger: 'blur' }
+    sys_app_logo: [
+      { required: true, message: '请输入app logo', trigger: 'blur' }
+    ],
+    sys_app_name: [
+      { required: true, message: '请输入app 名称', trigger: 'blur' }
     ],
     is_open: [
       { required: true, message: '请选择前台是否展示', trigger: 'blur' }
@@ -65,7 +74,7 @@ const createFormRule = () => {
   }
 }
 export default {
-  name: 'FormModal',
+  name: 'BasicModal',
   props: {
     modalRef: {
       type: Object,
@@ -79,28 +88,20 @@ export default {
     }
   },
   created() {
+    this.initFormData()
   },
   methods: {
+    initFormData() {
+      if (this.modalRef.data.id > 0) {
+        this.formData = {
+          ...this.formData,
+          ...this.modalRef.data
+        }
+      }
+    },
     handleSubmit() {
-      this.$refs.formRef.validate(valid => {
-        if (!valid) {
-          console.log('valid', valid)
-          return
-        }
-        var formData = this.formData
-        if (formData.id <= 0) {
-          addConfigApi(formData).then((res) => {
-            if (res.code !== 200) {
-              this.msgError(res.msg)
-              return
-            }
-
-            this.formData = createFormData()
-            this.msgSuccess(res.msg)
-            this.handleClose()
-          })
-        }
-      })
+      var formData = this.formData
+      this.$emit('handleSubmit', formData)
     },
     handleClose() {
       this.$emit('handleClose')

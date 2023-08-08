@@ -109,7 +109,6 @@ import { addAdminApi } from '@/api/admin/sys-admin'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { createRef } from '@/utils/tool'
-import { checkEmailByForm, checkMobileByForm } from '@/utils/form-validate'
 
 const createFormData = () => {
   return {
@@ -146,15 +145,15 @@ const createFormRules = () => {
     ],
     status: [
       { required: true, message: '请选择状态', trigger: 'change' }
-    ],
-    email: [
-      { required: false, message: '', trigger: 'blur' },
-      { validator: checkEmailByForm, trigger: 'blur' }
-    ],
-    phone: [
-      { required: false, message: '', trigger: 'blur' },
-      { validator: checkMobileByForm, trigger: 'blur' }
     ]
+    // email: [
+    //   { required: false, message: '', trigger: 'blur' },
+    //   { validator: checkEmailByForm, trigger: 'blur' }
+    // ],
+    // phone: [
+    //   { required: false, message: '', trigger: 'blur' },
+    //   { validator: checkMobileByForm, trigger: 'blur' }
+    // ]
   }
 }
 
