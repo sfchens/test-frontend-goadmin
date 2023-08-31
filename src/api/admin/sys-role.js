@@ -19,7 +19,7 @@ export function listRoleApi(query) {
 }
 export function getRoutes() {
   return request({
-    url: '/sys/menu/tree_role_list',
+    url: '/sys/menu/tree_list',
     method: 'get'
   })
 }

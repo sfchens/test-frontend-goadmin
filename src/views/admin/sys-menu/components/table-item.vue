@@ -175,7 +175,6 @@ export default {
       this.$emit('handleAdd', { tital: '新增', visible: true, data: row })
     },
     handleEdit(row) {
-      console.log(232323, row)
       this.$emit('handleEdit', { tital: '修改', visible: true, data: row })
     },
     handleDelete() {},

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询菜单列表
+// 菜单Tree
 export function treeListMenuApi(query) {
   return request({
     url: '/sys/menu/tree_list',
@@ -27,10 +27,10 @@ export function editMenuApi(data) {
   })
 }
 
-// 查询菜单列表
+// 菜单列表数据
 export function treeListAllMenuApi(query) {
   return request({
-    url: '/sys/menu/tree_list_all',
+    url: '/sys/menu/list',
     method: 'get',
     params: query
   })

@@ -38,7 +38,7 @@ export function generaMenu(routes, data) {
     const menu = {
       path: item.path,
       component: item.component === 'Layout' ? Layout : loadView(item.component),
-      hidden: item.visible !== 0,
+      hidden: item.visible === 0,
       children: [],
       name: item.menu_name,
       meta: {
@@ -151,6 +151,7 @@ export default {
             commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
             commit('SET_DEFAULT_ROUTES', sidebarRoutes)
             commit('SET_TOPBAR_ROUTES', sidebarRoutes)
+            console.log(232323, sidebarRoutes)
             resolve(asyncRoutes)
           }
         }).catch(error => {
